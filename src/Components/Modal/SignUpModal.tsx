@@ -7,6 +7,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import FontAwesome icons
+import useApiForSignUp from '@/hooks/useApiForSignUp';
 
 interface FormData {
   email: string;
@@ -18,6 +19,9 @@ const SignUpModal: React.FC = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>();
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // mutation 객체 생성
+  const mutationForSimpleCreateTodo = useApiForSignUp();
 
   const onSubmit = (data: FormData) => {
     console.log(data);
