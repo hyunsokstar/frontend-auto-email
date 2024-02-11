@@ -1,13 +1,33 @@
 import { useMutation } from 'react-query';
-import { apiForLogin } from '@/api/apiForUser';
 import { useToast } from '@chakra-ui/react';
+import useStore from '@/store/index';
+import { AxiosResponse } from 'axios';
+import { apiForLogin } from '@/api/apiForUser';
+
+interface ResponseTypeForLogin {
+    access_token: string;
+    loginUser: {
+        email: string;
+        id: number;
+    }
+}
 
 const useApiForLogIn = () => {
     const toast = useToast();
+    const setUser = useStore(state => state.setUser);
+    const setIsLoggedIn = useStore(state => state.setIsLoggedIn);
 
-    const mutationForLogin = useMutation(apiForLogin, {
-        onSuccess: (result) => {
+    const mutationForLogin = useMutation({
+        // mutationFn: ({ email, password }: LoginUserDto) => apiForLogin({ email, password }),
+        mutationFn: apiForLogin,
+        onSuccess: (result: AxiosResponse<ResponseTypeForLogin>) => {
             console.log("result : ", result);
+
+            setUser({
+                id: result.data.loginUser.id,
+                email: result.data.loginUser.email,
+            });
+            setIsLoggedIn(true);
 
             toast({
                 title: "로그인 성공",

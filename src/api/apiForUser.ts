@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { API_SERVER_URL } from "./CommonApi";
-import { LoginUserDto, SignUpDto } from "@/type/typeForUser";
+import { LoginUserDto, SignUpDto, apiForloginResponse } from "@/type/typeForUser";
 // import { QueryFunctionContext } from "@tanstack/react-query";
 
 const instance = axios.create({
@@ -9,8 +9,8 @@ const instance = axios.create({
 });
 
 // 1122
-
-export const apiForLogin = async ({ email, password }: LoginUserDto): Promise<AxiosResponse<{ access_token: string }>> => {
+export const apiForLogin = async ({ email, password }: LoginUserDto):
+    Promise<AxiosResponse<apiForloginResponse>> => {
 
     const loginUserDto = {
         email,
@@ -19,7 +19,10 @@ export const apiForLogin = async ({ email, password }: LoginUserDto): Promise<Ax
 
     try {
         const response = await instance.post('login', loginUserDto);
-        return response.data; // access_token을 반환합니다.
+
+        console.log("response : ", response);
+
+        return response; // access_token을 반환합니다.
     } catch (error) {
         throw error; // 에러 처리 로직을 추가할 수 있습니다.
     }
@@ -44,7 +47,6 @@ export const apiForSingUp =
             );
             return response;
         } catch (error) {
-            // 에러 처리 로직을 추가할 수 있습니다.
             throw error;
         }
     };
