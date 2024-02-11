@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { API_SERVER_URL } from "./CommonApi";
-import { LoginUserDto, SignUpDto, apiForloginResponse } from "@/type/typeForUser";
+import { LoginUserDto, SignUpDto, ResponseTypeForLogin, ResponseTypeForLoginCheck } from "@/type/typeForUser";
 // import { QueryFunctionContext } from "@tanstack/react-query";
 
 const instance = axios.create({
@@ -8,9 +8,38 @@ const instance = axios.create({
     withCredentials: true,
 });
 
+instance.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem('accessToken');
+        // console.log("access token 유무 확인 : ", accessToken);
+
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+
 // 1122
+export const apiForLoginCheck = async ():
+    Promise<AxiosResponse<ResponseTypeForLoginCheck>> => {
+
+    try {
+        const response = await instance.get('loginCheck');
+        console.log("response for loginCheck : ", response);
+
+        return response; // 
+    } catch (error) {
+        throw error; // 에러 처리 로직을 추가할 수 있습니다.
+    }
+};
+
 export const apiForLogin = async ({ email, password }: LoginUserDto):
-    Promise<AxiosResponse<apiForloginResponse>> => {
+    Promise<AxiosResponse<ResponseTypeForLogin>> => {
 
     const loginUserDto = {
         email,

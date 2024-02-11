@@ -27,6 +27,21 @@ const useApiForLogIn = () => {
                 id: result.data.loginUser.id,
                 email: result.data.loginUser.email,
             });
+
+            // result.data.access_token 을 localstorage 의 access_token 에 저장
+            // localstorage 의 access_token 에 저장 key accessToken
+            if (result.data.access_token) {
+                localStorage.setItem('accessToken', result.data.access_token);
+            } else {
+                toast({
+                    title: "로그인 실패",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                });
+                return;
+            }
+
             setIsLoggedIn(true);
 
             toast({

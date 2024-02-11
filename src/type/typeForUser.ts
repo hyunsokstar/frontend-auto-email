@@ -8,8 +8,16 @@ export interface LoginUserDto {
     password: string;
 }
 
-export interface apiForloginResponse {
+export interface ResponseTypeForLogin {
     access_token: string;
+    loginUser: {
+        email: string;
+        id: number;
+    }
+}
+
+export interface ResponseTypeForLoginCheck {
+    isLoggendIn: boolean;
     loginUser: {
         email: string;
         id: number;

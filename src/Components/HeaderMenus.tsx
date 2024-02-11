@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Flex, Input, Button, useColorMode, useColorModeValue, IconButton } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import SignUpModal from './Modal/SignUpModal';
 import LoginForm from './InputForm/LoginForm';
 import useStore from '@/store';
+import useApiForLogInCheck from '@/hooks/useApiForLoginCheck';
+
 
 const HeaderMenus: React.FC = () => {
     const { toggleColorMode } = useColorMode();
     const bg = useColorModeValue('teal.300', 'teal.700');
     const color = useColorModeValue('white', 'gray.100');
 
+    // mutation 
+    const mutationForLoginCheck = useApiForLogInCheck();
+
     // Zustand 스토어
     const isLoggedIn = useStore(state => state.isLoggedIn);
     const loginUser = useStore(state => state.loginUser);
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            mutationForLoginCheck.mutate()
+        }
+    }, [isLoggedIn])
+
 
     return (
         <Box bg={bg} color={color}>
