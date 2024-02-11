@@ -21,7 +21,7 @@ const useApiForSignUp = () => {
 
             toast({
                 title: "Error signing up",
-                description: error.message,
+                description: error.response.data.message,
                 status: "error",
                 duration: 2000,
                 isClosable: true,

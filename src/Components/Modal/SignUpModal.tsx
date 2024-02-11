@@ -26,6 +26,14 @@ const SignUpModal: React.FC = () => {
   const onSubmit = (data: FormData) => {
     console.log(data);
     // 여기서 회원 가입 처리 로직을 작성할 수 있습니다.
+
+    mutationForSimpleCreateTodo.mutate({
+      email: data.email,
+      password: data.password
+    })
+
+    setIsOpen(false)
+
   };
 
   const password = useRef<string | undefined>();
